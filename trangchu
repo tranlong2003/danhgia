@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đánh giá dịch vụ</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .stars input { display: none; }
+    .stars label {
+      float: right;
+      padding: 10px;
+      font-size: 24px;
+      color: #444;
+      transition: all 0.3s;
+    }
+    .stars input:checked ~ label,
+    .stars label:hover,
+    .stars label:hover ~ label {
+      color: #fd4;
+    }
+    textarea { width: 100%; height: 100px; margin-top: 10px; }
+    button { margin-top: 10px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h2>Đánh giá sản phẩm / dịch vụ</h2>
+  <form id="feedbackForm">
+    <div class="stars">
+      <input type="radio" name="rating" value="5" id="5"><label for="5">★</label>
+      <input type="radio" name="rating" value="4" id="4"><label for="4">★</label>
+      <input type="radio" name="rating" value="3" id="3"><label for="3">★</label>
+      <input type="radio" name="rating" value="2" id="2"><label for="2">★</label>
+      <input type="radio" name="rating" value="1" id="1"><label for="1">★</label>
+    </div>
+    <textarea name="comment" placeholder="Nhận xét của bạn..."></textarea>
+    <button type="submit">Gửi đánh giá</button>
+  </form>
+
+  <div id="status"></div>
+
+  <script>
+    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const rating = document.querySelector('input[name="rating"]:checked')?.value;
+      const comment = document.querySelector('textarea[name="comment"]').value;
+
+      if (!rating) {
+        alert("Vui lòng chọn số sao.");
+        return;
+      }
+
+      const response = await fetch('https://script.google.com/macros/s/AKfycbxO3ULUzdbz8sYWFC-61PZ2SUxKn7J1odgYTvdlHtGgVb5J9I9L72dJRZ_Dt2b4AZI/exec', {
+
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rating, comment })
+      });
+
+      const result = await response.text();
+      document.getElementById('status').innerText = result;
+    });
+  </script>
+</body>
+</html>
