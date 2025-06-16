@@ -75,11 +75,17 @@
       transition: color 0.3s;
     }
 
-    .stars input:checked ~ label,
-    .stars label:hover,
-    .stars label:hover ~ label {
-      color: gold;
-    }
+.stars label:hover,
+.stars label:hover ~ label,
+.stars input:checked ~ label {
+  color: #ccc;
+}
+.stars input:checked + label,
+.stars input:checked + label ~ label {
+  color: rgb(254, 217, 10);
+}
+
+
 
     button {
       background-color: #007bff;
@@ -126,13 +132,14 @@
         <input type="text" id="phone" placeholder="Số điện thoại" required />
         <input type="number" id="birthyear" placeholder="Năm sinh" required min="1900" max="2025" />
 
-        <div class="stars">
-          <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
-          <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
-          <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
-          <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
-          <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
-        </div>
+       <div class="stars">
+  <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+  <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+  <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+  <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+  <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
+</div>
+
 
         <textarea id="comment" placeholder="Ý kiến đánh giá..." required></textarea>
         <button type="submit">Gửi đánh giá</button>
