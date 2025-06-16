@@ -6,28 +6,47 @@
   <title>Đánh giá dịch vụ</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      background: linear-gradient(to right, #f0f4ff, #e0f7fa);
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
+      overflow: hidden;
+    }
+
+    .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .decor {
+      width: 120px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
     }
 
     .container {
       background: white;
-      padding: 30px 40px;
+      padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.1);
       text-align: center;
-      max-width: 450px;
-      width: 100%;
+      width: 400px;
     }
 
     h2 {
       margin-bottom: 20px;
-      color: #333;
+      color: #00796b;
     }
 
     input, textarea {
@@ -42,7 +61,7 @@
     .stars {
       display: flex;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .stars input {
@@ -77,33 +96,52 @@
     }
 
     .success {
-      margin-top: 15px;
+      margin-top: 12px;
       color: green;
       font-weight: bold;
       display: none;
     }
+
+    @media screen and (max-width: 768px) {
+      .wrapper {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .decor {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Đánh giá của bạn</h2>
-    <form id="reviewForm">
-      <input type="text" id="fullname" placeholder="Họ và tên" required />
-      <input type="text" id="phone" placeholder="Số điện thoại" required />
-      <input type="number" id="birthyear" placeholder="Năm sinh" required min="1900" max="2025" />
+  <div class="wrapper">
+    <!-- Bên trái trang trí -->
+    <img src="https://cdn-icons-png.flaticon.com/512/1029/1029183.png" class="decor" alt="icon trái">
 
-      <div class="stars">
-        <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
-        <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
-        <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
-        <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
-        <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
-      </div>
+    <!-- Form đánh giá -->
+    <div class="container">
+      <h2>Đánh giá của bạn</h2>
+      <form id="reviewForm">
+        <input type="text" id="fullname" placeholder="Họ và tên" required />
+        <input type="text" id="phone" placeholder="Số điện thoại" required />
+        <input type="number" id="birthyear" placeholder="Năm sinh" required min="1900" max="2025" />
 
-      <textarea id="comment" placeholder="Nhập ý kiến của bạn..." required></textarea>
-      <button type="submit">Xác nhận</button>
-      <div class="success" id="successMessage">✅ Đã phản hồi thành công!</div>
-    </form>
+        <div class="stars">
+          <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
+          <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+          <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+          <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+          <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+        </div>
+
+        <textarea id="comment" placeholder="Ý kiến đánh giá..." required></textarea>
+        <button type="submit">Gửi đánh giá</button>
+        <div class="success" id="successMessage">✅ Đã phản hồi thành công!</div>
+      </form>
+    </div>
+
+    <!-- Bên phải trang trí -->
+    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" class="decor" alt="icon phải">
   </div>
 
   <script>
@@ -126,9 +164,7 @@
       fetch('https://script.google.com/macros/s/AKfycbxAxTVZDxiFUAnJve7CTXbao6ibcs_2M8J__St-n6vU0OAmXMVsTDnM81G3eFnmPbNmiA/exec', {
         method: 'POST',
         body: JSON.stringify({ fullname, phone, birthyear, rating, comment }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' }
       })
       .then(response => response.text())
       .then(data => {
