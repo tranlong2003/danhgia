@@ -1,63 +1,143 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Đánh giá dịch vụ</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    .stars input { display: none; }
-    .stars label {
-      float: right;
-      padding: 10px;
-      font-size: 24px;
-      color: #444;
-      transition: all 0.3s;
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
+
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .stars input {
+      display: none;
+    }
+
+    .stars label {
+      font-size: 32px;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
     .stars input:checked ~ label,
     .stars label:hover,
     .stars label:hover ~ label {
-      color: #fd4;
+      color: gold;
     }
-    textarea { width: 100%; height: 100px; margin-top: 10px; }
-    button { margin-top: 10px; padding: 10px 20px; }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .success {
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <h2>Đánh giá sản phẩm / dịch vụ</h2>
-  <form id="feedbackForm">
-    <div class="stars">
-      <input type="radio" name="rating" value="5" id="5"><label for="5">★</label>
-      <input type="radio" name="rating" value="4" id="4"><label for="4">★</label>
-      <input type="radio" name="rating" value="3" id="3"><label for="3">★</label>
-      <input type="radio" name="rating" value="2" id="2"><label for="2">★</label>
-      <input type="radio" name="rating" value="1" id="1"><label for="1">★</label>
-    </div>
-    <textarea name="comment" placeholder="Nhận xét của bạn..."></textarea>
-    <button type="submit">Gửi đánh giá</button>
-  </form>
+  <div class="container">
+    <h2>Đánh giá của bạn</h2>
+    <form id="reviewForm">
+      <input type="text" id="fullname" placeholder="Họ và tên" required />
+      <input type="text" id="phone" placeholder="Số điện thoại" required />
+      <input type="number" id="birthyear" placeholder="Năm sinh" required min="1900" max="2025" />
 
-  <div id="status"></div>
+      <div class="stars">
+        <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
+        <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+        <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+        <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+        <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+      </div>
+
+      <textarea id="comment" placeholder="Nhập ý kiến của bạn..." required></textarea>
+      <button type="submit">Xác nhận</button>
+      <div class="success" id="successMessage">✅ Đã phản hồi thành công!</div>
+    </form>
+  </div>
 
   <script>
-    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+    const form = document.getElementById('reviewForm');
+    const successMessage = document.getElementById('successMessage');
+
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
+      const fullname = document.getElementById('fullname').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const birthyear = document.getElementById('birthyear').value.trim();
       const rating = document.querySelector('input[name="rating"]:checked')?.value;
-      const comment = document.querySelector('textarea[name="comment"]').value;
+      const comment = document.getElementById('comment').value.trim();
 
       if (!rating) {
-        alert("Vui lòng chọn số sao.");
+        alert("Bạn chưa chọn số sao.");
         return;
       }
 
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxAxTVZDxiFUAnJve7CTXbao6ibcs_2M8J__St-n6vU0OAmXMVsTDnM81G3eFnmPbNmiA/exec', {
-
+      fetch('https://script.google.com/macros/s/AKfycbxAxTVZDxiFUAnJve7CTXbao6ibcs_2M8J__St-n6vU0OAmXMVsTDnM81G3eFnmPbNmiA/exec', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rating, comment })
+        body: JSON.stringify({ fullname, phone, birthyear, rating, comment }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.text())
+      .then(data => {
+        successMessage.style.display = 'block';
+        form.reset();
+      })
+      .catch(error => {
+        alert("Lỗi gửi đánh giá: " + error);
       });
-
-      const result = await response.text();
-      document.getElementById('status').innerText = result;
     });
   </script>
 </body>
