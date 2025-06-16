@@ -49,7 +49,7 @@
         return;
       }
 
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxO3ULUzdbz8sYWFC-61PZ2SUxKn7J1odgYTvdlHtGgVb5J9I9L72dJRZ_Dt2b4AZI/exec', {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbxAxTVZDxiFUAnJve7CTXbao6ibcs_2M8J__St-n6vU0OAmXMVsTDnM81G3eFnmPbNmiA/exec', {
 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
